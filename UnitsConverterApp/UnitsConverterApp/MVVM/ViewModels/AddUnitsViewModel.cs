@@ -286,7 +286,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
                         UnitList = crep.GetUnitList(SelectedUnitType);
                         DataGridSource = crep.FillDataGrid(SelectedUnitType);
 
-                        ErrorVisibility = Hidden;
+                                                ErrorVisibility = Hidden;
                         ErrorMessages = string.Empty;
                     },
                     (object o) =>

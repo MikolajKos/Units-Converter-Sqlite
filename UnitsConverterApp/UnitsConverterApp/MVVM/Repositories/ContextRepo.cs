@@ -95,19 +95,14 @@ namespace UnitsConverterApp.MVVM.Repositories
         }
 
         public List<Unit> FillDataGrid(int typeId = 1)
-        {
-            if (typeId == 0)
-                return null;
-            
-
+        {   
             model.tableDataList = new List<Unit>();
 
-            model.tableDataList = myContext.Units
+            var tableList = model.tableDataList = myContext.Units
                 .Where(k => k.UnitTypeId == typeId)?
                 .Select(s => new Unit() { Name = s.Name, Symbol = s.Symbol, Ratio = s.Ratio }).ToList();
 
-
-            return model.tableDataList;
+            return tableList;
         }
 
         public void UpdateDatGrid()
