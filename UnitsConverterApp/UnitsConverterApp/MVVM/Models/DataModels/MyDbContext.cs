@@ -13,7 +13,7 @@ namespace UnitsConverterApp.MVVM.Models.DataModels
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"Data Source = C:\Users\nikok\OneDrive\Dokumenty\PROGRAMOWANIE\.NET\WFP\MVVM\Units-Converter-Sqlite\UnitsConverterApp\UnitsConverterApp\UnitConverterDb.db");
+            optionsBuilder.UseSqlite(@"Data Source = UnitConverterDB.db");
         }
     }
 }

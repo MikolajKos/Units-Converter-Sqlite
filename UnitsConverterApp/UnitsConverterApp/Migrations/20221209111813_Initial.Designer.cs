@@ -8,7 +8,7 @@ using UnitsConverterApp.MVVM.Models.DataModels;
 namespace UnitsConverterApp.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20221129185518_Initial")]
+    [Migration("20221209111813_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

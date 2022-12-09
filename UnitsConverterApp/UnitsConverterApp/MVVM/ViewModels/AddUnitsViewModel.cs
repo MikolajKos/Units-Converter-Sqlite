@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using UnitsConverterApp.Core;
 using UnitsConverterApp.MVVM.Models.DataModels.Entities;
 using UnitsConverterApp.MVVM.Repositories;
+using UnitsConverterApp.Validation;
+using UnitsConverterApp.Validation.TypesOfValidation;
+using static System.Windows.Visibility;
 
 namespace UnitsConverterApp.MVVM.ViewModels
 {
     public class AddUnitsViewModel : ObservableObject
     {
-        ContextRepo crep = new ContextRepo();
+        private ContextRepo crep = new ContextRepo();
+
 
         private string _unitTypeInput;
-
         public string UnitTypeInput
         {
             get
@@ -185,7 +184,30 @@ namespace UnitsConverterApp.MVVM.ViewModels
             }
         }
 
+        
+        private string _errorMessages;
 
+        public string ErrorMessages
+        {
+            get => _errorMessages;
+            set
+            {
+                _errorMessages = value;
+                OnPropertyChanged(nameof(ErrorMessages));
+            }
+        }
+
+
+        private Visibility _errorVisibility = Hidden;
+        public Visibility ErrorVisibility
+        {
+            get => _errorVisibility; 
+            set 
+            { 
+                _errorVisibility = value;
+                OnPropertyChanged(nameof(ErrorVisibility));
+            }
+        }
 
 
 
@@ -204,6 +226,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
                         crep.AddUnitType(UnitTypeInput);
                         UnitTypeInput = string.Empty;
 
+                        //Updates unit type 
                         UnitTypeList = crep.GetUnitTypeList();
                     },
                     (object o) =>
@@ -226,16 +249,51 @@ namespace UnitsConverterApp.MVVM.ViewModels
                 if (_addUnitCommand == null) _addUnitCommand = new RelayCommand(
                     (object o) =>
                     {
+                        Validate validate = new Validate();
+                        validate.AddValidator(new Validator<string>(UnitName, "Unit name",
+                            new List<ISpecyficValidation<string>>()
+                            {
+                                new ValidateStringEmpty()
+                            }));
+                        validate.AddValidator(new Validator<string>(UnitSymbol, "Unit symbol",
+                            new List<ISpecyficValidation<string>>()
+                            {
+                                new ValidateStringEmpty()
+                            }));                        
+                        validate.AddValidator(new Validator<string>(UnitRatio, "Unit ratio",
+                            new List<ISpecyficValidation<string>>()
+                            {
+                                new ValidateStringEmpty(),
+                                new ValidateStringIsDouble()
+                            }));
+
+
+                        if (!validate.Validation(out string message))
+                        {
+                            ErrorVisibility = Visible;
+                            ErrorMessages = message;
+                            return;
+                        }
+
                         crep.AddUnit(UnitName, UnitSymbol, double.Parse(UnitRatio), SelectedUnitType);
 
+                        //Clears Form
                         UnitName = string.Empty;
                         UnitSymbol = string.Empty;
                         UnitRatio = string.Empty;
 
+                        //Updates DataGrid
                         UnitList = crep.GetUnitList(SelectedUnitType);
                         DataGridSource = crep.FillDataGrid(SelectedUnitType);
+
+                        ErrorVisibility = Hidden;
+                        ErrorMessages = string.Empty;
                     },
-                    (object o) => true);
+                    (object o) =>
+                    {
+                        if (SelectedUnitType == 0) return false;
+                        return true;
+                    });
                 return _addUnitCommand;
             }
         }

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Remove="Design\Fonts\VarelaRound-Regular.ttf" />
-    <None Remove="UnitConverterDb.db" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,13 +24,12 @@
     <Resource Include="Design\Fonts\VarelaRound-Regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UnitConverterDb.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Validation\" />
+    <None Update="UnitConverterDB.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
