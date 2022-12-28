@@ -132,6 +132,19 @@ namespace UnitsConverterApp.MVVM.ViewModels
         }
 
 
+        private Unit _dataGridSelectedItem;
+
+        public Unit DataGridSelectedItem
+        {
+            get => _dataGridSelectedItem;
+            set
+            {
+                _dataGridSelectedItem = value;
+                OnPropertyChanged(nameof(DataGridSelectedItem));
+            }
+        }
+
+
         private string _convertFromUnit;
 
         public string ConvertFromUnit
@@ -184,7 +197,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
             }
         }
 
-        
+
         private string _errorMessages;
 
         public string ErrorMessages
@@ -201,9 +214,9 @@ namespace UnitsConverterApp.MVVM.ViewModels
         private Visibility _errorVisibility = Hidden;
         public Visibility ErrorVisibility
         {
-            get => _errorVisibility; 
-            set 
-            { 
+            get => _errorVisibility;
+            set
+            {
                 _errorVisibility = value;
                 OnPropertyChanged(nameof(ErrorVisibility));
             }
@@ -259,7 +272,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
                             new List<ISpecyficValidation<string>>()
                             {
                                 new ValidateStringEmpty()
-                            }));                        
+                            }));
                         validate.AddValidator(new Validator<string>(UnitRatio, "Unit ratio",
                             new List<ISpecyficValidation<string>>()
                             {
@@ -286,7 +299,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
                         UnitList = crep.GetUnitList(SelectedUnitType);
                         DataGridSource = crep.FillDataGrid(SelectedUnitType);
 
-                                                ErrorVisibility = Hidden;
+                        ErrorVisibility = Hidden;
                         ErrorMessages = string.Empty;
                     },
                     (object o) =>
@@ -316,7 +329,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
         }
 
 
-
         private ICommand _updateCommand;
 
         public ICommand UpdateCommand
@@ -332,6 +344,27 @@ namespace UnitsConverterApp.MVVM.ViewModels
                 return _updateCommand;
             }
         }
+
+
+        private ICommand _deleteCommand;
+
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                if (_deleteCommand == null) _deleteCommand = new RelayCommand(
+                    (object o) =>
+                    {
+                        crep.DeleteRow(DataGridSelectedItem.Id);
+
+                        //Update DataGrid
+                        DataGridSource = crep.FillDataGrid(SelectedUnitType);
+                    },
+                    (object o) => true);
+                return _deleteCommand;
+            }
+        }
+
 
 
         #endregion

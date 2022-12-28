@@ -100,9 +100,18 @@ namespace UnitsConverterApp.MVVM.Repositories
 
             var tableList = model.tableDataList = myContext.Units
                 .Where(k => k.UnitTypeId == typeId)?
-                .Select(s => new Unit() { Name = s.Name, Symbol = s.Symbol, Ratio = s.Ratio }).ToList();
+                .Select(s => new Unit() {Id = s.Id, Name = s.Name, Symbol = s.Symbol, Ratio = s.Ratio }).ToList();
 
             return tableList;
+        }
+
+        public void DeleteRow(int selectedId)
+        {
+            model.tableDataList = new List<Unit>();
+
+            myContext.Units.Remove(myContext.Units.FirstOrDefault(k => k.Id == selectedId));
+
+            myContext.SaveChanges();
         }
 
         public void UpdateDatGrid()

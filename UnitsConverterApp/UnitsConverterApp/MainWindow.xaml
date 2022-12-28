@@ -520,9 +520,11 @@
                     <TextBlock Text="{Binding SelectedUnitType}" Foreground="#FF4C72CD" FontWeight="Bold"/>
                 </WrapPanel>
                 <DataGrid ItemsSource="{Binding DataGridSource}"
+                          SelectedItem="{Binding DataGridSelectedItem}"
                           MaxHeight="235"
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header = "ID" Binding="{Binding Id}"  Width="*" IsReadOnly="True"/>
                         <DataGridTextColumn Header = "Name" Binding="{Binding Name}"  Width="*"/>
                         <DataGridTextColumn Header = "Symbol" Binding="{Binding Symbol}"  Width="*"/>
                         <DataGridTextColumn Header = "Ratio" Binding="{Binding Ratio}"  Width="*"/>
@@ -548,7 +550,8 @@
                         </Button.Resources>
                     </Button>
 
-                    <Button Width="100"
+                    <Button Command="{Binding DeleteCommand}"
+                        Width="100"
                         Height="40"
                         Background="Transparent"
                         Content="Delete" 
