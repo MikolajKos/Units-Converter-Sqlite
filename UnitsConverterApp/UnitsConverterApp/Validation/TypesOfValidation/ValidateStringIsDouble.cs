@@ -10,7 +10,7 @@ namespace UnitsConverterApp.Validation.TypesOfValidation
         {
             message = "";
 
-            if (int.TryParse(value, out int _))
+            if (double.TryParse(value, out double _))
                 return true;
 
             message = "is not a number";

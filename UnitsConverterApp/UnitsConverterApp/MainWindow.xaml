@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UnitsConverterApp" xmlns:vm="clr-namespace:UnitsConverterApp.MVVM.ViewModels"
         xmlns:converters="clr-namespace:UnitsConverterApp.Converters"
+        xmlns:viewHelpers="clr-namespace:UnitsConverterApp.MVVM.Views.ViewHelpers"
         mc:Ignorable="d"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -19,7 +20,7 @@
 
     <Window.Resources>
         <converters:UnitTypeNameToInt x:Key="UnitTypeNameToInt"/>
-
+        
         <Storyboard x:Key="AddConverterRollDown">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="AddUnitGrid" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="134.04"/>
@@ -519,17 +520,20 @@
                     <TextBlock Text="Add your units:" Margin="0 0 10 0"/>
                     <TextBlock Text="{Binding SelectedUnitType}" Foreground="#FF4C72CD" FontWeight="Bold"/>
                 </WrapPanel>
-                <DataGrid ItemsSource="{Binding DataGridSource}"
-                          SelectedItem="{Binding DataGridSelectedItem}"
-                          MaxHeight="235"
-                          AutoGenerateColumns="False">
+
+                <viewHelpers:CustomDataGrid ItemsSource="{Binding DataGridSource}"
+                                            SelectedItemsList="{Binding DataGridSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            MaxHeight="235"
+                                            AutoGenerateColumns="False"
+                                            Style="{StaticResource MaterialDesignDataGrid}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header = "ID" Binding="{Binding Id}"  Width="*" IsReadOnly="True"/>
                         <DataGridTextColumn Header = "Name" Binding="{Binding Name}"  Width="*"/>
                         <DataGridTextColumn Header = "Symbol" Binding="{Binding Symbol}"  Width="*"/>
                         <DataGridTextColumn Header = "Ratio" Binding="{Binding Ratio}"  Width="*"/>
                     </DataGrid.Columns>
-                </DataGrid>
+                </viewHelpers:CustomDataGrid>
+
 
                 <WrapPanel HorizontalAlignment="Left" Margin="0 10 0 0">
                     <Button Command="{Binding UpdateCommand}" 

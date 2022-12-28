@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -13,12 +14,14 @@ namespace UnitsConverterApp.MVVM.Repositories
     public class ContextRepo
     {
         private ContextRepoModel model = new ContextRepoModel();
-        private MyDbContext myContext = new MyDbContext();
+        
 
         #region Add Queries
 
         public void AddUnitType(string unitType)
         {
+            using MyDbContext myContext = new MyDbContext();
+
             myContext.UnitsType.Add(
                 new UnitType
                 {
@@ -30,6 +33,8 @@ namespace UnitsConverterApp.MVVM.Repositories
 
         public void AddUnit(string name, string symbol, double ratio, int unitType)
         {
+            using MyDbContext myContext = new MyDbContext();
+
             myContext.Units.Add(
                 new Unit
                 {
@@ -48,35 +53,38 @@ namespace UnitsConverterApp.MVVM.Repositories
         #region Get Queries
         public List<string> GetUnitTypeList()
         {
+            using MyDbContext myContext = new MyDbContext();
             model.getUnitTypeList = new List<string>();
 
-            var getNamesQuery = myContext.UnitsType.Select(s => s.UnitTypeName);
+            var unitTypesName = myContext.UnitsType.Select(s => s.UnitTypeName).ToList();
 
-            foreach (var elements in getNamesQuery)
-                model.getUnitTypeList.Add(elements.ToString());
+            /*foreach (var elements in getNamesQuery)
+                model.getUnitTypeList.Add(elements.ToString());*/
 
-            return model.getUnitTypeList;
+            return unitTypesName;
         }
 
         public List<string> GetUnitList(int typeId = 1)
         {
+            using MyDbContext myContext = new MyDbContext();
             model.getUnitList = new List<string>();
-            var getNamesQuery = myContext.Units.Where(k => k.UnitTypeId == typeId)?.Select(s => s.Name);
 
-            foreach (var elemens in getNamesQuery)
-                model.getUnitList.Add(elemens.ToString());
-
-            return model.getUnitList;
+            var unitsName = myContext.Units.Where(k => k.UnitTypeId == typeId)?.Select(s => s.Name).ToList();
+            return unitsName;
         }
 
         public string GetUnitSymbol(string unitName)
         {
+            using MyDbContext myContext = new MyDbContext();
+
             var getSymbolQuery = myContext.Units.FirstOrDefault(k => k.Name == unitName)?.Symbol;
             return getSymbolQuery;
         }
         
         private double GetRatio(string unitName)
         {
+            using MyDbContext myContext = new MyDbContext();
+
             var getRatioQuery = myContext.Units
                 .FirstOrDefault(k => k.Name == unitName)?.Ratio.ToString();
 
@@ -95,7 +103,8 @@ namespace UnitsConverterApp.MVVM.Repositories
         }
 
         public List<Unit> FillDataGrid(int typeId = 1)
-        {   
+        {
+            using MyDbContext myContext = new MyDbContext();
             model.tableDataList = new List<Unit>();
 
             var tableList = model.tableDataList = myContext.Units
@@ -104,18 +113,21 @@ namespace UnitsConverterApp.MVVM.Repositories
 
             return tableList;
         }
-
-        public void DeleteRow(int selectedId)
+       
+        public void DeleteRow(IList selectedId)
         {
-            model.tableDataList = new List<Unit>();
+            using MyDbContext myContext = new MyDbContext();
 
-            myContext.Units.Remove(myContext.Units.FirstOrDefault(k => k.Id == selectedId));
+            foreach (var selectedItem in selectedId)
+                myContext.Remove(selectedItem);
 
             myContext.SaveChanges();
         }
 
         public void UpdateDatGrid()
         {
+            using MyDbContext myContext = new MyDbContext();
+
             myContext.SaveChanges();
         }
     }

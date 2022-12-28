@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using UnitsConverterApp.Core;
@@ -132,15 +133,15 @@ namespace UnitsConverterApp.MVVM.ViewModels
         }
 
 
-        private Unit _dataGridSelectedItem;
+        private IList _dataGridSelectedItems = new ArrayList();
 
-        public Unit DataGridSelectedItem
+        public IList DataGridSelectedItems
         {
-            get => _dataGridSelectedItem;
+            get => _dataGridSelectedItems;
             set
             {
-                _dataGridSelectedItem = value;
-                OnPropertyChanged(nameof(DataGridSelectedItem));
+                _dataGridSelectedItems = value;
+                OnPropertyChanged(nameof(DataGridSelectedItems));
             }
         }
 
@@ -355,7 +356,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
                 if (_deleteCommand == null) _deleteCommand = new RelayCommand(
                     (object o) =>
                     {
-                        crep.DeleteRow(DataGridSelectedItem.Id);
+                        crep.DeleteRow(DataGridSelectedItems);
 
                         //Update DataGrid
                         DataGridSource = crep.FillDataGrid(SelectedUnitType);
