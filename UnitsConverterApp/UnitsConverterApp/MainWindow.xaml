@@ -283,17 +283,17 @@
 
             
             <WrapPanel Grid.Column="1" Grid.Row="2" Margin="20" VerticalAlignment="Center">
-                <TextBlock Text="38.45"
+                <TextBlock Text="{Binding ValueToConvert}"
                            FontSize="40"/>
-                <TextBlock Text="€"
+                <TextBlock Text="{Binding ConvertFromUnitSymbol}"
                            FontSize="40"/>
                 <TextBlock Text="="
                            Foreground="#FF673AB7"
                            FontSize="40"
                            Padding="30 0 30 0"/>
-                <TextBlock Text="180.32"
+                <TextBlock Text="{Binding CalculatedResult}"
                            FontSize="40"/>
-                <TextBlock Text="zł"
+                <TextBlock Text="{Binding ConvertToUnitSymbol}"
                            FontSize="40"/>
             </WrapPanel>
             
@@ -524,6 +524,7 @@
                 <viewHelpers:CustomDataGrid ItemsSource="{Binding DataGridSource}"
                                             SelectedItemsList="{Binding DataGridSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             MaxHeight="235"
+                                            CanUserDeleteRows="False"
                                             AutoGenerateColumns="False"
                                             Style="{StaticResource MaterialDesignDataGrid}">
                     <DataGrid.Columns>

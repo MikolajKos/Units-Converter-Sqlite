@@ -63,6 +63,32 @@ namespace UnitsConverterApp.MVVM.ViewModels
         }
 
 
+        private string _convertFromUnitSymbol;
+
+        public string ConvertFromUnitSymbol
+        {
+            get => _convertFromUnitSymbol; 
+            set 
+            { 
+                _convertFromUnitSymbol = value;
+                OnPropertyChanged(nameof(ConvertFromUnitSymbol));
+            }
+        }
+
+
+        private string _convertToUnitSymbol;
+
+        public string ConvertToUnitSymbol
+        {
+            get => _convertToUnitSymbol;
+            set
+            {
+                _convertToUnitSymbol = value;
+                OnPropertyChanged(nameof(ConvertToUnitSymbol));
+            }
+        }
+
+
         private string _unitRatio;
 
         public string UnitRatio
@@ -153,6 +179,9 @@ namespace UnitsConverterApp.MVVM.ViewModels
             get => _convertFromUnit;
             set
             {
+                //refreshing property
+                ConvertFromUnitSymbol = crep.GetUnitSymbol(value);
+
                 _convertFromUnit = value /*+ $" ({crep.GetUnitSymbol(value)})"*/;
                 OnPropertyChanged(nameof(ConvertFromUnit));
             }
@@ -166,6 +195,9 @@ namespace UnitsConverterApp.MVVM.ViewModels
             get => _convertToUnit;
             set
             {
+                //refreshing property
+                ConvertToUnitSymbol = crep.GetUnitSymbol(value);
+
                 _convertToUnit = value /*+ $" ({crep.GetUnitSymbol(value)})"*/;
                 OnPropertyChanged(nameof(ConvertToUnit));
             }
@@ -197,6 +229,8 @@ namespace UnitsConverterApp.MVVM.ViewModels
                 OnPropertyChanged(nameof(CalculatedResult));
             }
         }
+
+
 
 
         private string _errorMessages;

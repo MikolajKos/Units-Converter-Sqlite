@@ -58,9 +58,6 @@ namespace UnitsConverterApp.MVVM.Repositories
 
             var unitTypesName = myContext.UnitsType.Select(s => s.UnitTypeName).ToList();
 
-            /*foreach (var elements in getNamesQuery)
-                model.getUnitTypeList.Add(elements.ToString());*/
-
             return unitTypesName;
         }
 
@@ -98,8 +95,15 @@ namespace UnitsConverterApp.MVVM.Repositories
 
         public string CalculateValue(string enteredValue, string fromUnit, string toUnit)
         {
-            double result = (double.Parse(enteredValue) * GetRatio(toUnit)) / GetRatio(fromUnit);
-            return result.ToString();
+            try
+            {
+                double result = (double.Parse(enteredValue) * GetRatio(toUnit)) / GetRatio(fromUnit);
+                return result.ToString();
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
 
         public List<Unit> FillDataGrid(int typeId = 1)
