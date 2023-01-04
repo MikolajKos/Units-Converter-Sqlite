@@ -32,7 +32,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _unitName;
-
         public string UnitName
         {
             get
@@ -48,7 +47,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _unitSymbol;
-
         public string UnitSymbol
         {
             get
@@ -64,7 +62,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _convertFromUnitSymbol;
-
         public string ConvertFromUnitSymbol
         {
             get => _convertFromUnitSymbol; 
@@ -77,7 +74,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _convertToUnitSymbol;
-
         public string ConvertToUnitSymbol
         {
             get => _convertToUnitSymbol;
@@ -90,7 +86,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _unitRatio;
-
         public string UnitRatio
         {
             get
@@ -128,7 +123,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private int _selectedUnitType;
-
         public int SelectedUnitType
         {
             get
@@ -143,24 +137,35 @@ namespace UnitsConverterApp.MVVM.ViewModels
         }
 
 
-        private List<Unit> _dataGridSource;
+        private List<UnitType> _unitsTypeDataGridSource;
+        public List<UnitType> UnitsTypeDataGridSource
+        {
+            get => crep.FillUnitsTypesDataGrid(); 
+            set 
+            { 
+                _unitsTypeDataGridSource = value;
+                OnPropertyChanged(nameof(UnitsTypeDataGridSource));
+            }
+        }
 
-        public List<Unit> DataGridSource
+
+
+        private List<Unit> _unitsDataGridSource;
+        public List<Unit> UnitsDataGridSource
         {
             get
             {
-                return _dataGridSource;
+                return _unitsDataGridSource;
             }
             set
             {
-                _dataGridSource = value;
-                OnPropertyChanged(nameof(DataGridSource));
+                _unitsDataGridSource = value;
+                OnPropertyChanged(nameof(UnitsDataGridSource));
             }
         }
 
 
         private IList _dataGridSelectedItems = new ArrayList();
-
         public IList DataGridSelectedItems
         {
             get => _dataGridSelectedItems;
@@ -173,7 +178,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _convertFromUnit;
-
         public string ConvertFromUnit
         {
             get => _convertFromUnit;
@@ -189,7 +193,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _convertToUnit;
-
         public string ConvertToUnit
         {
             get => _convertToUnit;
@@ -205,7 +208,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _valueToConvert;
-
         public string ValueToConvert
         {
             get { return _valueToConvert; }
@@ -219,7 +221,6 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
 
         private string _calculatedResult;
-
         public string CalculatedResult
         {
             get { return _calculatedResult; }
@@ -231,10 +232,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
         }
 
 
-
-
         private string _errorMessages;
-
         public string ErrorMessages
         {
             get => _errorMessages;
@@ -273,6 +271,9 @@ namespace UnitsConverterApp.MVVM.ViewModels
                     {
                         crep.AddUnitType(UnitTypeInput);
                         UnitTypeInput = string.Empty;
+
+                        //Updates UnitType Datagrid
+                        UnitsTypeDataGridSource = crep.FillUnitsTypesDataGrid();
 
                         //Updates unit type 
                         UnitTypeList = crep.GetUnitTypeList();
@@ -332,7 +333,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
 
                         //Updates DataGrid
                         UnitList = crep.GetUnitList(SelectedUnitType);
-                        DataGridSource = crep.FillDataGrid(SelectedUnitType);
+                        UnitsDataGridSource = crep.FillUnitsDataGrid(SelectedUnitType);
 
                         ErrorVisibility = Hidden;
                         ErrorMessages = string.Empty;
@@ -356,7 +357,7 @@ namespace UnitsConverterApp.MVVM.ViewModels
                 if (_selectedUnitTypeCommand == null) _selectedUnitTypeCommand = new RelayCommand(
                     (object o) =>
                     {
-                        DataGridSource = crep.FillDataGrid(SelectedUnitType);
+                        UnitsDataGridSource = crep.FillUnitsDataGrid(SelectedUnitType);
                     },
                     (object o) => true);
                 return _selectedUnitTypeCommand;
@@ -392,8 +393,12 @@ namespace UnitsConverterApp.MVVM.ViewModels
                     {
                         crep.DeleteRow(DataGridSelectedItems);
 
-                        //Update DataGrid
-                        DataGridSource = crep.FillDataGrid(SelectedUnitType);
+                        //Update DataGrids
+                        UnitsDataGridSource = crep.FillUnitsDataGrid(SelectedUnitType);
+                        UnitsTypeDataGridSource = crep.FillUnitsTypesDataGrid();
+
+                        //Update UnitsType list
+                        UnitTypeList = crep.GetUnitTypeList();
                     },
                     (object o) => true);
                 return _deleteCommand;

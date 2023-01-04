@@ -10,5 +10,6 @@ namespace UnitsConverterApp.MVVM.Models
         public List<string> getUnitTypeList;
         public List<string> getUnitList;
         public List<Unit> tableDataList { get; set; }
+        public List<UnitType> UnitsTypesList { get; set; }
     }
 }

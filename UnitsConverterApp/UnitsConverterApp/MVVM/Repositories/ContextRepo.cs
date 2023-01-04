@@ -106,7 +106,7 @@ namespace UnitsConverterApp.MVVM.Repositories
             }
         }
 
-        public List<Unit> FillDataGrid(int typeId = 1)
+        public List<Unit> FillUnitsDataGrid(int typeId = 1)
         {
             using MyDbContext myContext = new MyDbContext();
             model.tableDataList = new List<Unit>();
@@ -117,7 +117,17 @@ namespace UnitsConverterApp.MVVM.Repositories
 
             return tableList;
         }
-       
+
+        public List<UnitType> FillUnitsTypesDataGrid()
+        {
+            using MyDbContext myContext = new MyDbContext();
+            model.UnitsTypesList = new List<UnitType>();
+
+            var tableList = model.UnitsTypesList = myContext.UnitsType.Select(s => new UnitType() {Id = s.Id, UnitTypeName = s.UnitTypeName}).ToList();
+
+            return tableList;
+        }
+
         public void DeleteRow(IList selectedId)
         {
             using MyDbContext myContext = new MyDbContext();

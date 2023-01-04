@@ -20,7 +20,7 @@
 
     <Window.Resources>
         <converters:UnitTypeNameToInt x:Key="UnitTypeNameToInt"/>
-        
+
         <Storyboard x:Key="AddConverterRollDown">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="AddUnitGrid" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="134.04"/>
@@ -97,8 +97,8 @@
 
                 <TextBlock Text="SELECT UNIT TYPE:" Foreground="#2CEEF0" Margin="0 0 0 10"/>
 
-                
-                    <ComboBox  ItemsSource="{Binding UnitTypeList}"
+
+                <ComboBox  ItemsSource="{Binding UnitTypeList}"
                                SelectedItem="{Binding SelectedUnitType, Converter={StaticResource UnitTypeNameToInt}, UpdateSourceTrigger=PropertyChanged}"
                            HorizontalAlignment="Left"
                            Foreground="#2CEEF0"
@@ -106,7 +106,7 @@
                            Height="40"
                            Width="350"/>
 
-                
+
                 <Separator HorizontalAlignment="Left" Margin="0 30 0 30" Width="350" Background="#FF4945B2"/>
 
                 <TextBlock Text="Convert From:" Foreground="#2CEEF0" Margin="0 0 0 10"/>
@@ -276,12 +276,12 @@
                                            Margin="0 0 10 0"/>
                             </WrapPanel>
                         </StackPanel>
-                        
+
                     </Border>
                 </Grid>
             </StackPanel>
 
-            
+
             <WrapPanel Grid.Column="1" Grid.Row="2" Margin="20" VerticalAlignment="Center">
                 <TextBlock Text="{Binding ValueToConvert}"
                            FontSize="40"/>
@@ -296,8 +296,8 @@
                 <TextBlock Text="{Binding ConvertToUnitSymbol}"
                            FontSize="40"/>
             </WrapPanel>
-            
-            
+
+
             <StackPanel Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Button 
                     Content="➕"
@@ -339,7 +339,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.RenderTransform>
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="130"/>
@@ -362,6 +362,28 @@
 
 
             <Canvas Grid.Row="0" Grid.Column="1">
+                <StackPanel Visibility="{Binding ErrorVisibility}" Grid.Column="1" Grid.Row="1" Width="405" Height="40" Canvas.Left="10" Canvas.Top="26">
+
+                    <Border Height="40" 
+                        CornerRadius="3"
+                        Background="#EA1E1E">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="⚠" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                            </StackPanel>
+                            <Grid Grid.Column="1" Background="#FF6E6E" Height="40" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding ErrorMessages}" Foreground="#AFFFFFFF" FontSize="14" VerticalAlignment="Center" Padding="10 0 0 0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
                 <Button 
                     Content="⮟"
                     Height="50"
@@ -408,32 +430,8 @@
             </StackPanel>
 
 
-            <StackPanel Visibility="{Binding ErrorVisibility}" Grid.Column="1" Grid.Row="1" Margin="20" VerticalAlignment="Bottom">
-
-                <TextBlock Text="Errors were found:" Margin="0 0 0 10" VerticalAlignment="Center"/>
-                <Border Height="40" 
-                        CornerRadius="3"
-                        Background="#EA1E1E">
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="40"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="⚠" Foreground="White" FontSize="16" FontWeight="Bold"/>
-                        </StackPanel>
-                        <Grid Grid.Column="1" Background="#FF6E6E" Height="40" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding ErrorMessages}" Foreground="#AFFFFFFF" FontSize="14" VerticalAlignment="Center" Padding="10 0 0 0"/>
-                        </Grid>
-                    </Grid>
-                </Border>
-            </StackPanel>
-
-
-            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
-                <Separator Width="960" Background="#FFC7C7C7"/>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20">
+                <Separator Width="350" Background="#FFC7C7C7"/>
             </StackPanel>
 
 
@@ -514,30 +512,29 @@
             </StackPanel>
 
 
-            <StackPanel Grid.Row="2" Grid.Column="1" Margin="20" HorizontalAlignment="Stretch">
-                
-                <WrapPanel>
-                    <TextBlock Text="Add your units:" Margin="0 0 10 0"/>
-                    <TextBlock Text="{Binding SelectedUnitType}" Foreground="#FF4C72CD" FontWeight="Bold"/>
-                </WrapPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="20" HorizontalAlignment="Stretch">
 
-                <viewHelpers:CustomDataGrid ItemsSource="{Binding DataGridSource}"
+                <StackPanel Margin="0 0 0 40">
+                    <WrapPanel>
+                        <TextBlock Text="Units types:" Margin="0 0 10 0"/>
+                    </WrapPanel>
+
+                    <viewHelpers:CustomDataGrid ItemsSource="{Binding UnitsTypeDataGridSource}"
                                             SelectedItemsList="{Binding DataGridSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                            MaxHeight="235"
+                                            MaxHeight="120"
                                             CanUserDeleteRows="False"
+                                            CanUserAddRows="False"
                                             AutoGenerateColumns="False"
                                             Style="{StaticResource MaterialDesignDataGrid}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header = "ID" Binding="{Binding Id}"  Width="*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header = "Name" Binding="{Binding Name}"  Width="*"/>
-                        <DataGridTextColumn Header = "Symbol" Binding="{Binding Symbol}"  Width="*"/>
-                        <DataGridTextColumn Header = "Ratio" Binding="{Binding Ratio}"  Width="*"/>
-                    </DataGrid.Columns>
-                </viewHelpers:CustomDataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header = "ID" Binding="{Binding Id}"  Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header = "Type Name" Binding="{Binding UnitTypeName}"  Width="*" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </viewHelpers:CustomDataGrid>
 
 
-                <WrapPanel HorizontalAlignment="Left" Margin="0 10 0 0">
-                    <Button Command="{Binding UpdateCommand}" 
+                    <WrapPanel HorizontalAlignment="Left" Margin="0 10 0 0">
+                        <!--<Button Command="{Binding UpdateCommand}" 
                         Width="100"
                         Margin="0 0 10 0"
                         Height="40"
@@ -553,9 +550,9 @@
                                 <Setter Property="CornerRadius" Value="3"/>
                             </Style>
                         </Button.Resources>
-                    </Button>
+                    </Button>-->
 
-                    <Button Command="{Binding DeleteCommand}"
+                        <Button Command="{Binding DeleteCommand}"
                         Width="100"
                         Height="40"
                         Background="Transparent"
@@ -565,14 +562,78 @@
                             BorderBrush="#FF838383"
                             BorderThickness="2"
                             FontWeight="Bold">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="3"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                    </WrapPanel>
+                </StackPanel>
+                
+                
+                <StackPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Added units:" Margin="0 0 10 0"/>
+                        <TextBlock Text="{Binding SelectedUnitType}" Foreground="#FF4C72CD" FontWeight="Bold"/>
+                    </WrapPanel>
+
+                    <viewHelpers:CustomDataGrid ItemsSource="{Binding UnitsDataGridSource}"
+                                            SelectedItemsList="{Binding DataGridSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            MaxHeight="235"
+                                            CanUserDeleteRows="False"
+                                            CanUserAddRows="False"
+                                            AutoGenerateColumns="False"
+                                            Style="{StaticResource MaterialDesignDataGrid}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header = "ID" Binding="{Binding Id}"  Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header = "Name" Binding="{Binding Name}"  Width="*"/>
+                            <DataGridTextColumn Header = "Symbol" Binding="{Binding Symbol}"  Width="*"/>
+                            <DataGridTextColumn Header = "Ratio" Binding="{Binding Ratio}"  Width="*"/>
+                        </DataGrid.Columns>
+                    </viewHelpers:CustomDataGrid>
+
+
+                    <WrapPanel HorizontalAlignment="Left" Margin="0 10 0 0">
+                        <!--<Button Command="{Binding UpdateCommand}" 
+                        Width="100"
+                        Margin="0 0 10 0"
+                        Height="40"
+                        Background="Transparent"
+                        Content="Update" 
+                        FontSize="12" 
+                        Foreground="#FF838383"
+                            BorderBrush="#FF838383"
+                            BorderThickness="2"
+                            FontWeight="Bold" Cursor="Hand">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="3"/>
                             </Style>
                         </Button.Resources>
-                    </Button>
+                    </Button>-->
 
-                </WrapPanel>
+                        <Button Command="{Binding DeleteCommand}"
+                        Width="100"
+                        Height="40"
+                        Background="Transparent"
+                        Content="Delete" 
+                        FontSize="12" 
+                        Foreground="#FF838383"
+                            BorderBrush="#FF838383"
+                            BorderThickness="2"
+                            FontWeight="Bold">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="3"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                    </WrapPanel>
+                </StackPanel>
+
 
             </StackPanel>
         </Grid>

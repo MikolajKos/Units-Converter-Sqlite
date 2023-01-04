@@ -19,13 +19,15 @@ namespace UnitsConverterApp.Converters
         {
             using (MyDbContext myContext = new MyDbContext())
             {
-                if (!string.IsNullOrWhiteSpace(value.ToString()))
+                try
                 {
                     var getUnitTypeId = myContext.UnitsType.FirstOrDefault(k => k.UnitTypeName == value.ToString())?.Id;
                     return getUnitTypeId;
                 }
-                else
+                catch (Exception)
+                {
                     return 0;
+                }
             }
         }
     }
